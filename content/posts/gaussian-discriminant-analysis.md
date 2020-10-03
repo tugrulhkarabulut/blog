@@ -7,6 +7,8 @@ series: true
 canonical_url: false
 description: "An introduction to Gaussian Discriminant Analysis. It is a nonparametric method that is used in classification. It assumes all the features are 
 normally distributed"
+content_width: 1200px
+
 ---
 
 Two Different Probabilistic Approaches Towards Classsification

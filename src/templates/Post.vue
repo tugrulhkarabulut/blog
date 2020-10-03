@@ -7,8 +7,7 @@
 
       <PostMeta :post="$page.post" />
     </div>
-
-    <div class="post content-box">
+    <div class="post content-box" :style="{ 'max-width': $page.post.content_width ? $page.post.content_width : ''  }">
       <div class="post__header">
         <g-image
           alt="Cover image"
@@ -45,7 +44,8 @@ query Post ($id: ID!) {
       path
     }
     description
-    content
+    content,
+    content_width
   }
 }
 </page-query>
@@ -75,6 +75,7 @@ export default {
 
   mounted() {
     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    console.log(this.$page.post)
   },
 };
 </script>

@@ -6,6 +6,8 @@ tags: ['Decision Tree', 'Boosting', 'Gradient Boosting', 'Classification', 'Regr
 series: true
 canonical_url: false
 description: "Mathematical explanation of Gradient Boosting algorithm and brief explanation of XGBoost system."
+content_width: 1200px
+
 ---
 
 
@@ -18,20 +20,13 @@ prediction to the ground truth $y$. To find the optimal $F$, we find the
 function that minimizes the expected value of some pre-determined loss
 function.
 
-$$F^* =   \underset{F}{\operatorname{argmin}} \ E\_{Y | x}[L(y, F(\mathbf{x}))] \tag{14}$$
+$$
+F^* = \underset{F}{\operatorname{argmin}} \ E\_{Y | x}[L(y, F(\mathbf{x}))] \tag{14}
+$$
 
 Instead of looking at all possible functions, we usually narrow our
 function space down to a family of parameterized functions
-$F(\mathbf{x}; \mathbf{P})$ where $\mathbf{P}$ is a set of parameters:
-
-$\mathbf{P} =
-                    \left[
-                        \begin{array}{c}
-                            P_1 \\
-                            P_2 \\
-                            \vdots
-                        \end{array}
-                    \right]$
+$F(\mathbf{x}; \mathbf{P})$ where $\mathbf{P}$ is a set of parameters that defines the model.
 
 Now, the problems reduces to finding the parameters, $P^*$, that
 minimizes the expected loss.
@@ -42,7 +37,7 @@ $$\begin{aligned}
             \end{aligned}$$
 
 And we denote our estimated function as
-$F^* = F(\mathbf{x};\mathbf{P^*})$
+$F^\* = F(\mathbf{x};\mathbf{P^*})$
 
 ### Numerical Optimization on Additive Models
 
