@@ -75,7 +75,6 @@ export default {
 
   mounted() {
     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-    console.log(this.$page.post)
   },
 };
 </script>
