@@ -7,6 +7,8 @@
 module.exports = {
   siteName: 'Tuğrul Hasan Karabulut',
   siteDescription: 'Tuğrul Hasan Karabulut\'s blog. I write about Machine Learning.',
+  siteUrl: 'https://tugrulhkarabulut.github.io',
+  pathPrefix: '/blog',
 
   templates: {
     Post: '/:title',
