@@ -174,19 +174,6 @@ referred as *pre-pruning*, meaning that pruning the tree while building
 it. There are also *post-pruning* techniques which prunes the free after
 it is grown. We won't discuss post-pruning in this article.
 
-Other Algorithms for Tree Building
-----------------------------------
-
-There are other decision tree building algorithms besides CART. Some
-examples are *ID3*, *C4.5*, *C5.0*, etc,. For example, C4.5 treats
-categorical and numerical variables differently. It does binary
-splitting for numerical variables by finding a threshold as in CART. It
-does K-way splitting for categorical variables that can have K distinct
-values. Also, it uses cross-entropy as splitting criterion.
-
-Now, let us discuss how to fully exploit decision trees by applying
-ensemble methods.
-
 Ensemble Learning
 =================
 
