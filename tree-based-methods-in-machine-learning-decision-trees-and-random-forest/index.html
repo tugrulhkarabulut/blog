@@ -207,15 +207,6 @@ too large. Consequently, prevents overfitting. These criteria often
 referred as <em>pre-pruning</em>, meaning that pruning the tree while building
 it. There are also <em>post-pruning</em> techniques which prunes the free after
 it is grown. We won't discuss post-pruning in this article.</p>
-<h2 id="other-algorithms-for-tree-building"><a href="#other-algorithms-for-tree-building" aria-hidden="true"><span class="icon icon-link"></span></a>Other Algorithms for Tree Building</h2>
-<p>There are other decision tree building algorithms besides CART. Some
-examples are <em>ID3</em>, <em>C4.5</em>, <em>C5.0</em>, etc,. For example, C4.5 treats
-categorical and numerical variables differently. It does binary
-splitting for numerical variables by finding a threshold as in CART. It
-does K-way splitting for categorical variables that can have K distinct
-values. Also, it uses cross-entropy as splitting criterion.</p>
-<p>Now, let us discuss how to fully exploit decision trees by applying
-ensemble methods.</p>
 <h1 id="ensemble-learning"><a href="#ensemble-learning" aria-hidden="true"><span class="icon icon-link"></span></a>Ensemble Learning</h1>
 <p>Basic idea behind the ensemble learning is combining multiple base
 learners to create a powerful model that has higher performance than
