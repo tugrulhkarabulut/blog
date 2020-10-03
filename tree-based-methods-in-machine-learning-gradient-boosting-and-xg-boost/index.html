@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html data-html-server-rendered="true" lang="en" data-vue-tag="%7B%22lang%22:%7B%22ssr%22:%22en%22%7D%7D">
+
+<head>
+  <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="assets/favicon/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+  <title>Tree Based Methods in Machine Learning - Gradient Boosting and XGBoost - Tuğrul Hasan Karabulut</title><meta name="gridsome:hash" content="9431073780a0637ed7cff386b4a37f6d678f5f02"><meta data-vue-tag="ssr" charset="utf-8"><meta data-vue-tag="ssr" name="generator" content="Gridsome v0.7.21"><meta data-vue-tag="ssr" data-key="viewport" name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta data-vue-tag="ssr" data-key="format-detection" name="format-detection" content="telephone=no"><meta data-vue-tag="ssr" data-key="description" name="description" content="Tuğrul Hasan Karabulut&#x27;s blog. I write about Machine Learning."><meta data-vue-tag="ssr" name="description" content="Mathematical explanation of Gradient Boosting algorithm and brief explanation of XGBoost system."><link data-vue-tag="ssr" rel="icon" href="data:,"><link data-vue-tag="ssr" rel="icon" type="image/png" sizes="16x16" href="/blog/assets/static/favicon.ce0531f.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="icon" type="image/png" sizes="32x32" href="/blog/assets/static/favicon.ac8d93a.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="icon" type="image/png" sizes="96x96" href="/blog/assets/static/favicon.b9532cc.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="apple-touch-icon" type="image/png" sizes="76x76" href="/blog/assets/static/favicon.f22e9f3.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="apple-touch-icon" type="image/png" sizes="152x152" href="/blog/assets/static/favicon.62d22cb.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="apple-touch-icon" type="image/png" sizes="120x120" href="/blog/assets/static/favicon.1539b60.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="apple-touch-icon" type="image/png" sizes="167x167" href="/blog/assets/static/favicon.dc0cdc5.aff555f00e87434048aa5be8a1e7b08c.png"><link data-vue-tag="ssr" rel="apple-touch-icon" type="image/png" sizes="180x180" href="/blog/assets/static/favicon.7b22250.aff555f00e87434048aa5be8a1e7b08c.png"><link rel="preload" href="/blog/assets/css/0.styles.9598e617.css" as="style"><link rel="preload" href="/blog/assets/js/app.ffa2eea8.js" as="script"><link rel="preload" href="/blog/assets/js/page--src--templates--post-vue.41fa0e29.js" as="script"><link rel="prefetch" href="/blog/assets/js/page--node-modules--gridsome--app--pages--404-vue.92791da9.js"><link rel="prefetch" href="/blog/assets/js/page--src--pages--index-vue.db5d50f6.js"><link rel="prefetch" href="/blog/assets/js/page--src--templates--tag-vue.3ac837de.js"><link rel="stylesheet" href="/blog/assets/css/0.styles.9598e617.css"><noscript data-vue-tag="ssr"><style>.g-image--loading{display:none;}</style></noscript>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config(
+      {
+          "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX", "TeX"], linebreaks: { automatic: true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+          tex2jax: { inlineMath: [["$", "$"], ["\\\\(", "\\\\)"]], displayMath: [["$$", "$$"], ["\\[", "\\]"]], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
+          TeX: {
+              noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+              equationNumbers: { autoNumber: "AMS" }
+          }
+      }
+  );
+</script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML-full"></script>
+</head>
+
+<body >
+  <script>
+    // Add dark / light detection that runs before Vue.js load. Borrowed from overreacted.io
+    (function () {
+      window.__onThemeChange = function () { };
+      function setTheme(newTheme) {
+        window.__theme = newTheme;
+        preferredTheme = newTheme;
+        document.body.setAttribute('data-theme', newTheme);
+        window.__onThemeChange(newTheme);
+      }
+
+      var preferredTheme;
+      try {
+        preferredTheme = localStorage.getItem('theme');
+      } catch (err) { }
+
+      window.__setPreferredTheme = function (newTheme) {
+        setTheme(newTheme);
+        try {
+          localStorage.setItem('theme', newTheme);
+        } catch (err) { }
+      }
+
+      var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      darkQuery.addListener(function (e) {
+        window.__setPreferredTheme(e.matches ? 'dark' : 'light')
+      });
+
+      setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
+    })();
+  </script>
+  <div id="app" data-server-rendered="true"><header class="header"><div class="header__left"><a href="/blog/" class="logo active"><span class="logo__text">
+	← See All Posts
+  </span></a></div><div class="header__right"><button role="button" aria-label="Toggle dark/light" class="toggle-theme"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button></div></header><main class="main"><div class="post-title"><h1 class="post-title__text">
+      Tree Based Methods in Machine Learning - Gradient Boosting and XGBoost
+    </h1><div class="post-meta">
+   Posted 3. October 2020.
+   <strong>16 min read.</strong></div></div><div class="post content-box" style="max-width:1200px;"><div class="post__header"><!----></div><div class="post__content"><h2 id="gradient-boosting"><a href="#gradient-boosting" aria-hidden="true"><span class="icon icon-link"></span></a>Gradient Boosting</h2>
+<p>In a general supervised machine learning setting, we often want to find
+an estimate $F(\mathbf{x})$, that produces a value $y^*$ as the
+prediction to the ground truth $y$. To find the optimal $F$, we find the
+function that minimizes the expected value of some pre-determined loss
+function.</p>
+<p>$$
+F^* = \underset{F}{\operatorname{argmin}} \ E_{Y | x}[L(y, F(\mathbf{x}))] \tag{14}
+$$</p>
+<p>Instead of looking at all possible functions, we usually narrow our
+function space down to a family of parameterized functions
+$F(\mathbf{x}; \mathbf{P})$ where $\mathbf{P}$ is a set of parameters that defines the model.</p>
+<p>Now, the problems reduces to finding the parameters, $P^*$, that
+minimizes the expected loss.</p>
+<p>$$\begin{aligned}
+\mathbf{P^*} &#x26;= \underset{\mathbf{P}}{\operatorname{argmin}} \ E_{Y | x}[L(y, F(\mathbf{x}; \mathbf{P}))] \\\
+&#x26;= \underset{\mathbf{P}}{\operatorname{argmin}} \ \mathbf{\Phi(\mathbf{P})}
+\end{aligned}$$</p>
+<p>And we denote our estimated function as
+$F^* = F(\mathbf{x};\mathbf{P^*})$</p>
+<h3 id="numerical-optimization-on-additive-models"><a href="#numerical-optimization-on-additive-models" aria-hidden="true"><span class="icon icon-link"></span></a>Numerical Optimization on Additive Models</h3>
+<p>Now, we restrict our attention to additive models. We define our
+additive as following:</p>
+<p>$$
+F(\mathbf{x}; { \ \beta_m, \mathbf{a}_m \ }_{m=1}^M)
+= \sum \limits_{m=1}^{M} \beta_m h(\mathbf{x}; \mathbf{a}_m) \tag{15}
+$$</p>
+<p>So, the $\mathbf{P}$ corresponds to the parameter set
+${ \ \beta_m, \mathbf{a}_m \ }_{m=1}^M$ and
+$h(\mathbf{x}; \mathbf{a})$ is a simple model obtained by a weak
+learner. We will be using small regression trees as our weak learners.
+In that case, the parameters, $\mathbf{a}_m$, corresponds to split
+variables, split points and predictions at leaf (mean, median, etc. for
+regression trees). And the parameter $\beta_m$ is the weight of the weak
+learner.</p>
+<p>If we make an analogy to gradient descent, in which we make an update
+with a function's steepest direction to find the point where it is
+minimum:</p>
+<p>$$x \gets x - \alpha * f^ \prime (x)$$</p>
+<p>where $\alpha$ is the learning data.</p>
+<p>Or if we want to find the parameters of a function where it attains its
+minimum value, we make updates using a cost function
+$J(\mathbf{\theta})$:</p>
+<p>$$\theta_i \gets \theta_i - \alpha \frac{\partial J(\mathbf{\theta})}{\partial \theta_i}$$</p>
+<p>With the same logic, in Gradient Boosting, we make updates to our
+additive model:</p>
+<p>$$F_{m}(\mathbf{x}) = F_{m-1}(\mathbf{x}) + F_m(\mathbf{x})$$</p>
+<p>where $f_m(\mathbf{x}) = -\rho_m g_m(\mathbf{x})$ and</p>
+<p>$$g_m(\mathbf{x}) = \left[
+\frac{\partial E_y[L(y, F(\mathbf{x}) | \mathbf{x}]}{\partial F(\mathbf{x})}
+\right]_{F(\mathbf{x}) = F_{m-1}(\mathbf{x})}$$</p>
+<p>and the final solution will be:</p>
+<p>$$F^*(\mathbf{x}) = \sum \limits_{m=0}^{M} f_m(\mathbf{x})$$</p>
+<p>where $f_0(x)$ is the initial guess.</p>
+<p>We also find the optimum $\rho_m$ as:</p>
+<p>$$\rho_m = \underset{\rho}{\operatorname{argmin}} \ E_{y, \mathbf{x}} L(y, F_{m-1}(\mathbf{x}) - \rho g_m(\mathbf{x}))$$</p>
+<h3 id="training"><a href="#training" aria-hidden="true"><span class="icon icon-link"></span></a>Training</h3>
+<p>This method cannot be directly applied when we have limited data because
+we cannot calculate the expected loss directly. In this case, we make
+use of the training set that we have.</p>
+<p>We will use the parameterized additive model in (15) and minimize
+expected loss estimated from the training set:</p>
+<p>$$
+{ \ \beta_m, \mathbf{a}_m \ } = \underset{\beta^\prime_m, \mathbf{a}^\prime_m}{\operatorname{argmin}} \ \sum \limits_{i=1}^{N} L  \left( y_i, \sum \limits_{m=0}^{M} \beta^\prime_m h(\mathbf{x}_i; \mathbf{a}^\prime_m) \right)
+$$</p>
+<p>It's often hard to find all the parameters at one step. Instead of this,
+we use an iterative approach.</p>
+<p>$$
+{ \  \beta_m, \mathbf{a}_m \ } = \underset{\beta^\prime_m, \mathbf{a}^\prime_m}{\operatorname{argmin}} \ \sum \limits_{i=1}^{N} L  \left( y_i, F_{m-1}(\mathbf{x}_i) + \beta^\prime_m h(\mathbf{x}_i; \mathbf{a}^\prime_m) \right)
+$$</p>
+<p>then we make update:</p>
+<p>$$
+F_m(\mathbf{x}) = F_{m-1}(\mathbf{x}) + \beta_m h(\mathbf{x}; \mathbf{a}_m)
+$$</p>
+<p>If you recall, this is the Forward Stagewise Additive Modelling
+technique that we talked about in the previous section.</p>
+<p>In the case where we have finite data, $g_m$, the gradients are
+calculated for the training data instances ${ \mathbf{x}_i }_{i=1}^N$:</p>
+<p>$$
+g_m(\mathbf{x}_i) = \left[
+\frac{\partial L(y, F(\mathbf{x}_i) }{\partial F(\mathbf{x}_i)}
+\right]_{F(\mathbf{x}) = F_{m-1}(\mathbf{x})}
+$$</p>
+<p>But we cannot calculate the gradients directly for new data points other
+than the ones in the training set. And even if for training set, if we
+use the gradients directly, the model would not be well generalized.
+Therefore, we need our model to learn a mapping from training data
+points to gradients in order to generalize to unseen data. To do that,
+we use a parameterized function and that is the
+$h(\mathbf{x}; \mathbf{a})$, as we mentioned and learn its parameters,
+$\mathbf{a}$, as given below:</p>
+<p>$$
+{ \ \mathbf{a}_m \ } =  \underset{\mathbf{a}}
+{\operatorname{argmin}} \ \sum \limits_{i=1}^N (-g_m(\mathbf{x}_i) - \beta h(\mathbf{x}_i; \mathbf{a} )) \tag{16}
+$$</p>
+<p>So, we fit the negative gradients, $-g_m$, to the parameterized model
+$h(\mathbf{x}; \mathbf{a})$ to learn a mapping from the obversations to
+its gradients. Negative gradients are also called \"pseudo-responses\",
+in the sense that, we try to learn a mapping to them even though they
+are not the real response values. And they are also called
+\"pseudo-residuals\" as well.</p>
+<p>Therefore, we have a general algorithm that we will work for any
+differentible loss function. At each stage of the algorithm we learn a
+mapping from data points to gradients. This is analogous to the standard
+applications of gradient descent in machine learning where the
+parameters of a function is learned.</p>
+<p><img class="g-image g-image--lazy g-image--loading" src="data:image/svg+xml,%3csvg fill='none' viewBox='0 0 717 358' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cdefs%3e%3cfilter id='__svg-blur-ba04fe72a786f3f519bbde7e6e21b39c'%3e%3cfeGaussianBlur in='SourceGraphic' stdDeviation='40'/%3e%3c/filter%3e%3c/defs%3e%3cimage x='0' y='0' filter='url(%23__svg-blur-ba04fe72a786f3f519bbde7e6e21b39c)' width='717' height='358' xlink:href='data:image/png%3bbase64%2ciVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/%2bnTAAAACXBIWXMAAAsSAAALEgHS3X78AAAEp0lEQVRYw83Y11IbSxAGYL3/u8CFLghFgRC5yDlnAzIIDnDI%2bXzaxnvWQrYvrNRVLD2zM7v99/wdVrnX19ebm5vb29t/Ewk9rldXV2aur68p1z8kZmIy1sQkof/TLLm4uHh%2bfv74%2bMj5KxQKAwMDCwsLy8vL09PT/f39xWJxcnLy4OBgbGxsfX19c3PTcGdnZ35%2bfmZmZnt728zq6qqVe3t7W1tb5g0tOD8/bxqAl5eXCoC3tzev7%2b3t7ezsBGM0EZZ1dHQwbnFxkWXlcnllZWVubg6M2dlZUA1PTk6Gh4dXEjE5MTFh48PDgwe%2bNkXe398rAB4fHwHYSuTo6KhUKnH8SSIMPT09BeMgEbe%2bJ1JK5Pj42F3L0vnDw8NvzRLvYvknAP4eHBzM5/NdXV3Oobu7m9GMw6j9/X3X8fHxy8tLqwN0W0ku/jmRp6cnDL67u6OgFybAhm1YIVxwTpgGhlSqntUSeBUAcg6jWfwbs3Z3d7EFsPv7%2b3Q%2bwqj1JyA0Iy4FIjBnZ2coJC6npqbcGhoaEgBra2tYZB6jJCKpMxjfcl7lvJ77MURSRxhONUQbQyYCQzGMdIlUEApfAGJZW5wA8tS8B0wUCxGCP5JpOwaxqJWCsEIe5GZWogqinyYi06uvKoC7yNPT08Pxf0mb%2bnohx8fsRnFIEIb16IEq7JaUVFxDiivmLC0twdYOsfsThTiVxXgSpSE8BBg8kXzEhisAMinFaQTxUl%2bGkiYxV9tdPZAiijw8XSne6hg8FQCcCoOCqiQ7AczxArZS1Gbs6uvrcxTc76BkHgeSZUI2%2bYYSqcz2qNn6EVsgeUhEfrOgXlyqAOCnqFasTx9qMgxlsTSqUdPDWcOXUDkZQ4otshNz3TKkR6ynqLKti0OrO/0%2bAaTlKXVMVOKsk5xJMOExEaajFkXwCBguECfokX1Uk2KgCkBNYR8uYXNVPvlKAxh%2blZcbBYBxTlZoIqt3s4BHo/vHe5MbGxsIrbHDEwUbT4LNQsIHg6FJ56CQ021swQlEiWUoNjsNxgkAQx8D6G4SKubijFwkJCLP2FJOBDa3zEcwtJ5CQQxGc6fToLOS6VLKH4tUVUZqdK/6E4CaqT2GbqkAEcTZW9mEUzMkmnoCYV98DGDCUyICl%2b4ctBKWyUXWRzYUGOnRoZPJKIhBMKQSGIaehpOR%2bxsVxN6H9Gkh826xq5EeS8SXPnL7ugdGvOK6bzQEA4lOib0mZQLbDW23y4z1WpVisSii0npc/xOIRMRhkSiDCSZZE28FCYAobY4lEj/d%2buir48Qo4f74QrKX7smUBvXe/wOILiVeHxU3SGKSAhsMSlW2lAY3qrJ%2bC7JQ9EK8q0uRZxADeaIXMvSx5hYG6xRkVVfzkhIdYeJrzhXOQqEgn4r1mqHcwCyUjbNoFREjQpmAZzJoQ48ItiZaiftEbHS1C6RmtxIM4rmRkZF8Ps%2bgr1nyo72l8k3Mf7wbrWgavmn/mFL8a2Fqh19WKiegR9DGoPLo6KjEh/e6f1zXSEcSbOsTQG4dGAzytFzOYoEIg6QZk/r%2b%2bC26rQRfPn/cRZXyD4mSFJ/zMXOWSKn9RK6Lnxf%2bA2B9EQNyVotlAAAAAElFTkSuQmCC' /%3e%3c/svg%3e" width="717" alt="image" data-srcset="/blog/assets/static/grad-boost.46f75e1.883942d94b7e0ac8abb2e731ecc2f76a.png 717w" data-sizes="(max-width: 717px) 100vw, 717px" data-src="/blog/assets/static/grad-boost.46f75e1.883942d94b7e0ac8abb2e731ecc2f76a.png"><noscript><img class="g-image g-image--lazy g-image--loaded" src="/blog/assets/static/grad-boost.46f75e1.883942d94b7e0ac8abb2e731ecc2f76a.png" width="717" alt="image"></noscript></p>
+<h3 id="applications-of-gradient-boosting"><a href="#applications-of-gradient-boosting" aria-hidden="true"><span class="icon icon-link"></span></a>Applications of Gradient Boosting</h3>
+<p>Let us derive some algorithms for common tasks such as regression and
+classification using the Gradient Boosting methodology that is presented
+in the previous section.</p>
+<h3 id="least-squares-regression"><a href="#least-squares-regression" aria-hidden="true"><span class="icon icon-link"></span></a>Least Squares Regression</h3>
+<p>We define the loss function for least squares regression as
+$L(y, F) = \frac{(y-F)^2}{2}$, the squared error. Pseudo-responses are
+derivative of this loss function. So, $\widetilde{y}$ is simply $y - F$.
+Our initials guess will be $F_0(\mathbf{x}) = \bar{y}$, namely the mean
+of the target values, because squared error is minimized at the mean.
+With these, we can build our least squares regression with Gradient
+Boosting algorithm.</p>
+<p><img class="g-image g-image--lazy g-image--loading" src="data:image/svg+xml,%3csvg fill='none' viewBox='0 0 715 261' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cdefs%3e%3cfilter id='__svg-blur-0047a96c60bf63012a450e6d856e00e2'%3e%3cfeGaussianBlur in='SourceGraphic' stdDeviation='40'/%3e%3c/filter%3e%3c/defs%3e%3cimage x='0' y='0' filter='url(%23__svg-blur-0047a96c60bf63012a450e6d856e00e2)' width='715' height='261' xlink:href='data:image/png%3bbase64%2ciVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAACXBIWXMAAAsSAAALEgHS3X78AAADi0lEQVRYw9XYa08aURAGYP//L/GD3zQxxrvReEet90sVtFxUqNoKCFTsw06zEkzsJyidxJOzs4fd9515Z85ZR5rN5rfECoVCqVTK5/M3NzfG29vbfGJuZbPZWMCur69zuVyhy7oXWB9jTHJ9s6urq2q1%2bvb2NuJveXl5fn4%2bk8ns7OxsbGzMzs66XFpaKhaLi4uLx8fHwF1cXFxeXu7v75fL5c3NzbOzMx7jyclJpVJZXV1162tilh0eHp6enpq3Wq1ffbN2u90hIAPb29szMzNjY2MLCwtbW1vwwT0%2bPn50dAQZNOha4xaqyBwcHMzNzaG6vr7OD%2bve3p7J1NRUJrGVlZV4jjSW%2b2P39/eNRqND4OXlxZuAEM5sYiZeLK6APj8/y5eg3t3d/Uzs4eHh6enpR5c9Pj6mnpjESpPvfTPw3glEtChHXCcnJ4VZGVhxfn4eUiEtKK2OrA2VdWpAwQlYvV6XF4pqJIbY6%2burSSux0BxPe2jsnQCVE7FilQdMKIxmJGE4Q96bAdHVPem1VqtRfCB2aS7qnDwo6Vnm6P2VVXd4BkEAMt1jenqakPRETUYFAxo7wMTEhPJVJBKi7YyOjiL2kUN6OfiMdSRE7mCRuw5jVAZwhOj5MSF9yxSJyo4ikbcoFc5aYil6jSgqfnAEgACLkFSCdytlu5J9NJwqxKhz2ddsC7Jk4lKijOjpvGoGes9BTO/qqZ%2b%2bpuVPBuLdghdekwiq2POTmbGemDlibhnVRpqK2B05jf9AQgE3kHVbM7E0ijHGDiItdjoM/RyNWB91H5ehQ7EgvEFISDhpwymAeEg/lOPdnOqYrmxnNGaMnTsOf8qGx26NhnkcPdbW1jQAYnO%2bMKaJ7a%2bEcDACAa42CjrQIRtrQkjQOBdZYI5AnDVcRtXGaUJ%2b1AaPNZ4WuR2QhGDtlkqqonQuS0o2FkMpzEHvkzLtd2PtEIhNSrR2d3dFThuhCrEEN4QuzGjQEqmIN79l0PMTVRyqPcSv3NKd0joewKY2EpWnFiEADiwjnURaGCFx0jFkZBPaQE8q9FAM%2ba0nOc0UeYEYaBcSWsd6e63NON7dHbP/4Cwk/PFJKYo9bfTj6a%2bH2%2bfnxMFlwMZJ6ATwJTFicDKlDVryMYDbUGdAG1GIJORT0HcwOfmWJW4cdHR8TFRCdchM/4jtsnOcVqbxlVlJrJRYMTEFGv%2bqGDajmujmvwEiynmn7%2ba17gAAAABJRU5ErkJggg==' /%3e%3c/svg%3e" width="715" alt="image" data-srcset="/blog/assets/static/grad-boost-regression.b81fcc2.942b45240e54b5d3e2150ea442b4fbcd.png 715w" data-sizes="(max-width: 715px) 100vw, 715px" data-src="/blog/assets/static/grad-boost-regression.b81fcc2.942b45240e54b5d3e2150ea442b4fbcd.png"><noscript><img class="g-image g-image--lazy g-image--loaded" src="/blog/assets/static/grad-boost-regression.b81fcc2.942b45240e54b5d3e2150ea442b4fbcd.png" width="715" alt="image"></noscript></p>
+<h3 id="binary-classification"><a href="#binary-classification" aria-hidden="true"><span class="icon icon-link"></span></a>Binary Classification</h3>
+<p>In the case of binary classification, we have negative binomial
+log-likelihood as the loss function:</p>
+<p>$$
+L(y, F) = - (y \log p + (1-y) \log (1-p))
+$$</p>
+<p>where $y \in { -1, 1 }$. $p$ is related to $F$ through:</p>
+<p>$$p(y = 1 | \mathbf{x}) = \frac{1}{1 + e^{-F(\mathbf{x})}}$$</p>
+<p>Pulling out $F$ from this equation, we find:</p>
+<p>$$F(\mathbf{x}) = \frac{1}{2} \log \left[ \frac{P(y = 1 | \mathbf{x})}{P(y = -1 | \mathbf{x})} \right]$$</p>
+<p>With some algebraic manipulation, we can write the same loss function
+using only $y$ and $F$:</p>
+<p>$$L(y, F) = \log( 1 + \exp(-2yF) )$$</p>
+<p>Taking derivative with respect to $F$, we find the pseudo-response:</p>
+<p>$$\widetilde{y_i} = - \left[  \frac{\partial{L(y_i, F(\mathbf{x}_i))}}{F(\mathbf{x}_i)}  \right]_{F(\mathbf{x}) = F_{m-1}(\mathbf{x}_i)}
+= \frac{2y_i}{1 + \exp(2y_iF_{m-1}(\mathbf{x}_i))} \tag{17}$$</p>
+<p>where $i = 1, 2, \dots, N$</p>
+<p>We will use regression trees as our base learners to learn a mapping to
+these pseudo-responses. After building the regression tree, predictions
+in the leaves, $R_{jm}$, is the solution of this objectve:</p>
+<p>$$\gamma_{jm} = \underset{\gamma}
+{\operatorname{argmin}} \sum \limits_{ \mathbf{x} \in R_{jm} } \log \left(  1 + \exp(-2y_i(F_{m-1}(\mathbf{x}) + \gamma))  \right) \tag{18}$$</p>
+<p>We can't directly solve this equation. Instead, we will estimate it with
+a single Newton-Raphson step. For that, we need to find the first and
+second derivative of:</p>
+<p>$$H(\gamma; R_{jm}) =  \sum \limits_{ \mathbf{x} \in R_{jm} } \log \left(  1 + \exp(-2y_i(F_{m-1}(\mathbf{x}) + \gamma) \right)) \tag{19}$$</p>
+<p>1-step Newton-Raphson approximation of gamma with initial value 0 is:</p>
+<p>$$\begin{aligned}
+\gamma &#x26;= \gamma_0 - \frac{H^\prime(\gamma_0)}{H^{\prime\prime}(\gamma_0)} \\\
+&#x26;= 0 - \frac{H^\prime(0)}{H^{\prime\prime}(0)} \\\
+&#x26;= - \frac{H^\prime(0)}{H^{\prime\prime}(0)}
+\end{aligned}$$</p>
+<p>First derivative of $H$ is:</p>
+<p>$$H^\prime(\gamma) = \sum \limits_{ \mathbf{x} \in R_{jm} }  \frac{-2y_i}{1 + \exp(2y_i(F_{m-1}(\mathbf{x}_i) + \gamma))} \tag{20}$$</p>
+<p>And at $\gamma = 0$:</p>
+<p>$$\begin{aligned}
+H^\prime(0) &#x26;= \sum \limits_{ \mathbf{x} \in R_{jm} }  \frac{-2y_i}{1 + \exp(2y_iF_{m-1}(\mathbf{x}_i))}
+\end{aligned}$$</p>
+<p>We can see this equation is equal to negative of $\widetilde{y}$ (see
+equation (17)). So:</p>
+<p>$$H^\prime(\gamma) = -\sum \limits_{ \mathbf{x} \in R_{jm} }  \widetilde{y_i} \tag{21}$$</p>
+<p>Second derivative of $H$ can be found by taking derivative of (19) with
+respect to $\gamma$ again:</p>
+<p>$$\begin{aligned}
+H^{\prime\prime}(\gamma) &#x26;= \sum \limits_{ \mathbf{x} \in R_{jm} } \frac{d}{d\gamma} H^\prime(\gamma) \\\
+&#x26;= \sum \limits_{ \mathbf{x} \in R_{jm} } \frac{
+(-2y_i)  2y_i  \exp({2y_iF_{m-1}(\mathbf{x})})
+}{<br>
+\left( 1 + \exp({ 2y_i (F_{m-1}(\mathbf{x}) + \gamma) }) \right)^2
+} \\\
+&#x26;= \sum \limits_{ \mathbf{x} \in R_{jm} }  - \widetilde{y} \ . \ \widetilde{y} \ . \ exp(2y_iF_{m-1}(\mathbf{x})) \\\
+&#x26;= \sum \limits_{ \mathbf{x} \in R_{jm} }  - \widetilde{y} \ . \ \widetilde{y} \ . \ \frac{(2y - \widetilde{y})}{\widetilde{y}} \\\
+&#x26;= \sum \limits_{ \mathbf{x} \in R_{jm} }  \widetilde{y} (\widetilde{y} - 2y)
+\end{aligned}$$</p>
+<p>We can simplify this a little bit further. We can see that, from the
+equation (17), $y$ and $\widetilde{y}$ always has the same sign. So, the
+product $y \ . \ \widetilde{y}$ equals to $| \widetilde{y} |$.</p>
+<p>Therefore, the second derivative equals to:</p>
+<p>$$H^{\prime\prime}(\gamma) = \sum \limits_{ \mathbf{x} \in R_{jm} }  |\widetilde{y}| \  (|\widetilde{y}| - 2) \tag{22}$$</p>
+<p>Being calculated the first and second derivatives, we can find our
+1-step Newton-Raphson approximation of $\gamma$:</p>
+<p>$$\begin{aligned}
+\gamma_{jm} &#x26;= - \frac{H^\prime(0)}{H^{\prime\prime}(0)} \\\
+&#x26;=  -\frac{ \displaystyle{
+\sum \limits_{ \mathbf{x} \in R_{jm} }  \widetilde{y}
+} }
+{
+\displaystyle{
+\sum \limits_{ \mathbf{x} \in R_{jm} }  |\widetilde{y}| \  (|\widetilde{y}| - 2)
+}
+} \\\
+\end{aligned} $$</p>
+<p>$$
+\gamma_{jm}     =     \frac{ \displaystyle{
+\sum \limits_{ \mathbf{x} \in R_{jm} }  \widetilde{y}
+} }
+{
+\displaystyle{
+\sum \limits_{ \mathbf{x} \in R_{jm} }  |\widetilde{y}| \  (2 - |\widetilde{y}|)
+}
+}  \tag{23}
+$$</p>
+<p>By using (23), we can label the leaves of the decision tree that was
+built in mth iteration.</p>
+<p>Finally, we must derive an initial prediction, $F_0(\mathbf{x})$. One
+can easily show that the negative binomial log-likelihood is minimized
+at:</p>
+<p>$$F_0(\mathbf{x}) = \frac{1}{2} \log \left(\frac{ \displaystyle{
+\sum \limits_{i=1}^N 1(y_i=1)
+} }{
+\displaystyle{
+\sum \limits_{i=1}^N 1(y_i=-1)
+}
+}
+\right) \tag{24}$$</p>
+<p>Notice that we used $\frac{1}{N} \sum \limits_{i=1}^N 1(y_i=1)$ as an
+estimate for $P(y = 1 | \mathbf{x})$. Similarly
+$\frac{1}{N} \sum \limits_{i=1}^N 1(y_i=-1)$ is an estimate for
+$P(y = -1 | \mathbf{x})$. By using these estimates, we came up with
+(24).</p>
+<p>Note that the $F_0$ is refers to a constant value that minimizes cost</p>
+<p>Equation above becames a lot clear if we used
+$\bar{y} = \frac{1}{N} \sum \limits_{i=1}^N y_i$:</p>
+<p>$$F_0(\mathbf{x}) = \frac{1}{2} \log \frac{1+\bar{y}}{1-\bar{y}} \tag{25}$$</p>
+<p><img class="g-image g-image--lazy g-image--loading" src="data:image/svg+xml,%3csvg fill='none' viewBox='0 0 714 380' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cdefs%3e%3cfilter id='__svg-blur-4859a7c545ea05a25ac4bbabba611977'%3e%3cfeGaussianBlur in='SourceGraphic' stdDeviation='40'/%3e%3c/filter%3e%3c/defs%3e%3cimage x='0' y='0' filter='url(%23__svg-blur-4859a7c545ea05a25ac4bbabba611977)' width='714' height='380' xlink:href='data:image/png%3bbase64%2ciVBORw0KGgoAAAANSUhEUgAAAEAAAAAiCAIAAABgN0jYAAAACXBIWXMAAAsSAAALEgHS3X78AAAFBUlEQVRYw83YaU8bSRAGYP//v5GvkfYLEiAhYsCAkhDCYa5AOAJkAwESYIGEcx/mZSeOTVhvJHtdklvV5Z7pOt6q6p7K7e3t94K%2bFfT9H8JfXFycn59nzL8XBZ2dnV00kMXlmjDo8vIyf%2bUNofIlTS8MEf7VNp2ennr87u6u4jc1NTU0NPTq1av5%2bfnXr1%2bPjo4ODw/Pzc0tLi4Sjo2NLSwsVKtVknfv3tXr9c3NTY%2bQr6ysWDM%2bPj47O7u2tvbmzRvT9%2b/fWzMwMGC9v0wnJia8YXV1dXJyMq/1oF2sJ5wriHB9ff3Tp09/tkcfP348Pj5%2bMMB%2btHn27Nng4KAta7Uaxgb4w8PDra2tnZ2d2DYzMzM9Pb23t%2bcVtqQ3JahFv%2bXlZXxU%2bfLli3dubGx41f7%2bPrMpSsIdRss%2bfPiQ9Ra/ffvW41aSUAYi7v4LVTywWNDS0pItd3d3twqyB/0wHMOLxu3tbULux5drtgvCmJaMNWyO5fisLBej8tlSaBk719smAT84OHiIAMf8UVBfX9/IyMjz58%2b5%2beTkBE6811LuYdhvuKcLdG9A8lJOCDdgJYllSUZCgOPLm5ubjqrye965NwC%2bQWimoKOjI6H5%2bvUrx5vCNN8LGT5Z34sR4GmF6fPnz7SnpQrI8dJUWIzkpsBqWY8aIAIymJYMYIl6LJqwZKp6AJgIJBcFxPRXoW/CQHcS5sGA/v5%2byKElfwM935viX7x4gWEGICne%2boMaGuV6JKHvDbi6ugIbCqn64ZsWXV9fC1EaR6PeaaWBnLix3OP5C94U307n/Y8qhNTNly9fghAf60S21xborTxrNEqtvkNOy3RNiGKSaWKllutEXMAexoCfiLG8DFeHIlaJI20ZJtuYUotOlNDeqSubkyHWgBNha0Aa0d8F3/9kgAjwFqw7U9DSVARo7N8c3VQhlVSSYETGyCo5vVkQx4ubx3VApuK1Diiy0r/G9NoSYB0xgM90K5rxuu3pZzRlD3QxJkcgaOF%2bCokDob/I5YCIRW69NpKmgYkwTwVRHYRQ8JARlJtgELnISAba5BzeNai0a0Brtt02kClnw0n0xpi2rrltIcIOmfp4BFptuCkIDypOqUoTHn7aVKtzTaO5CpWbgUcjZCMEZbVS41NY4/tHFb0uyBuamkYngvBgQC6TSrt6ksuOfA1Pjne2U0YkLoluILnxInBcEIYLcoJKTzAyUpZT2svVH5Z34jT1owrxFj3kru0VFsUk5%2brg3lmDPfyqsGhkaquiCU40o6uYSOuco9LLMQwzJhS5BHcpBx4FBnUpxJ18nNyVBullJK4%2b/9eN59%2bTGO%2b84OJLb%2b5s/PdXSd9a0LqUxI19oGTgSmvL7bbxuPa0fo0ltdt94FdLqd4UGVnxtIO7gKifDJCIUJ4PUimCAX3qKQPKz16R68qlVTnPJmW9UGbL6ci7YUBuklCuSioptVotpxfkDEdX%2bSpNlUJnpFw%2bTYGK5bmsObFpcLJZhVVnncwBDw97HTcg3/TS7e2dnhDXIgztUxmNpulHbFNP86GPSfmrMUMERJ3t9E26UmLjicP9o8LEodMIacsAGKjX69VqNUnJwUF/mzepJzK4G0lsD603nzjjzjZ37ZF7/X0E4N7ZAaaVeWnnmCDzylNQ8H3Xq3RvAPePFJQP61JTVXGdzxdz6MpJ6abHKPGvpKLvFsTxxnxJzkfpfGre6D2iW75O/w1Tw4LeP4jzxQAAAABJRU5ErkJggg==' /%3e%3c/svg%3e" width="714" alt="image" data-srcset="/blog/assets/static/grad-boost-classification.41d2f2b.9be9d62c47f8956ee88af42b0b9bb3a6.png 714w" data-sizes="(max-width: 714px) 100vw, 714px" data-src="/blog/assets/static/grad-boost-classification.41d2f2b.9be9d62c47f8956ee88af42b0b9bb3a6.png"><noscript><img class="g-image g-image--lazy g-image--loaded" src="/blog/assets/static/grad-boost-classification.41d2f2b.9be9d62c47f8956ee88af42b0b9bb3a6.png" width="714" alt="image"></noscript></p>
+<p>Following the same logic, any learning task with any differentiable loss
+function $L$ and base learner $h$, can be done with Gradient Boosting
+algorithm presented in Algorithm 5.</p>
+<h3 id="regularization"><a href="#regularization" aria-hidden="true"><span class="icon icon-link"></span></a>Regularization</h3>
+<p>Usually, we don't want our learning algorithm to \"overlearn\" our
+training set. Instead, we want them to generalize and have high
+performance on unseen data as well as training data. If a learning
+algorithm performs almost perfect on training data but perform poorly on
+a separate validation set, then that algorithm is said to be overfit.
+There are techniques to overcome this problem of overfitting. They are
+called regularization techniques. Regularization techniques differs from
+algorithm to algorithm.</p>
+<p>For example, in gradient descent, we regularize our model by tuning the
+learning rate parameter or number of iterations. Learning rate is the
+shrinkage parameter applied on the gradients of the cost function.</p>
+<p>In Gradient Boosting, we train $M$ base learner to learn a mapping to
+gradients. Then update our model with these gradients. So, one natural
+regularization technique is tuning the $M$ parameter. Other one is
+bringing a new learning rate parameter $\nu$, to the model. We can
+modify our model update equation with this learning rate parameter as
+the following:</p>
+<p>$F_m(\mathbf{x}) = F_{m-1}(x) + \nu \ . \ \rho_m h(\mathbf{x}_i; \mathbf{a}_m)$</p>
+<p>By using a learning rate, we reduce the influence of a single base
+learner to leave some room for other base learners to improve the model.</p>
+<p>There are other effective regularization techniques that are used by
+popular Gradient Boosting libraries such as XGBoost, LightGBM, Catboost,
+etc. Popular ones includes maximum features to use at each iteration
+(this is similar to Random Forest), subsampling the training set at each
+iteration and maximum depth of each tree, etc.</p>
+<p>In the next section, we will discuss these popular algorithms that uses
+the Gradient Boosting concept.</p>
+<h2 id="xgboost"><a href="#xgboost" aria-hidden="true"><span class="icon icon-link"></span></a>XGBoost</h2>
+<p>In recent years, several Gradient Boosting algorithms has been
+developed. With these algorithms, Gradient Boosting became much more
+scalable and computationally efficient. In Gradient Boosted Decision
+Trees, most computationally expensive part is the tree building process.
+For each non-terminal node, a split criterion must be found by looking
+at all possible splits of each feature. This process is really slows
+down the training of Gradient Boosted Decision Trees. If we have lots of
+features and lots of data, even one step of Gradient Boosting takes an
+unreasonable amount of time. Recently developed algorithms address this
+problem and gives efficient solutions.</p>
+<p>One popular Gradient Boosting franework is XGBoost. It was initially
+developed in 2014. It uses a modified cost function that has an
+additional regularization term which penalizes the complexity of the
+trees. Besides that, it addresses computational problems that arise when
+using Gradient Boosting in large data sets by proposing several
+solutions.</p>
+<h3 id="regularized-cost-function"><a href="#regularized-cost-function" aria-hidden="true"><span class="icon icon-link"></span></a>Regularized Cost Function</h3>
+<p>As we seen on the previous chapter, given a loss function, $L$, we
+define our objective (cost function) as:</p>
+<p>$$\sum \limits_{i=1}^N L(y_i, F_{m}(\mathbf{x}_i))$$</p>
+<p>XGBoost proposes a modified version of this objective that takes
+regularization into account:</p>
+<p>$$\mathcal{L} = \sum \limits_{i=1}^N L(y_i, F_{M}(\mathbf{x}_i)) + \sum \limits_{k = 1}^M \Omega (f_k) \tag{26}$$</p>
+<p>where
+$\Omega(f) = \displaystyle{\gamma T + \frac{1}{2} \lambda \sum \limits_{j=1}^T {w_j}^2}$.
+$T$ is the number of leaves in the tree $f$ and $w_j$ is the score in
+jth leaf. $\gamma$ and $\lambda$ are regularization parameters.</p>
+<p>This objective minimizes the loss of the final model $F_M$ with $M$
+trees. However, in practice, it's impossible to find $M$ trees in only
+one step. We need a greedy approach that adds the trees in an iterative
+fashion. So, at iteration m, we need to solve the objective:</p>
+<p>$$\mathcal{L}^{(m)} = \sum \limits_{i=1}^N L(y_i, F_{m-1}(\mathbf{x}_i) + f_m(\mathbf{x}_i)) + \Omega (f_m) \tag{27}$$</p>
+<p>Assuming that $L$ is a twice differentiable function, we approximate the
+$L$ function by second order Taylor polynomial.</p>
+<p>$$\mathcal{L}^{(m)} = \sum \limits_{i=1}^N \left[
+L(y_i, F_{m-1}(\mathbf{x}_i)) + g(\mathbf{x}_i)f_m(\mathbf{x}_i) + \frac{1}{2} h(\mathbf{x}_i)f_m^2(\mathbf{x}_i)
+\right]  + \Omega (f_m) \tag{28}$$</p>
+<p>where $$g(\mathbf{x}) =
+\frac{
+\partial L(y_i, F_{m-1}(\mathbf{x}))
+}{
+\partial F_{m-1}(\mathbf{x})
+}$$ and</p>
+<p>$$h(\mathbf{x}) =
+\frac{
+\partial {L(y_i, F_{m-1}(\mathbf{x}))}^2
+}{
+\partial^2 F_{m-1}(\mathbf{x})
+}$$</p>
+<p>This equation can be simplified by removing the constant terms.</p>
+<p>$$\mathcal{\tilde{L}}^{(m)} = \sum \limits_{i=1}^N \left[
+g(\mathbf{x}_i)f_m(\mathbf{x}_i) + \frac{1}{2} h(\mathbf{x}_i)f_m^2(\mathbf{x}_i)
+\right]  + \Omega (f_m)$$</p>
+<p>$$\mathcal{\tilde{L}}^{(m)} = \sum \limits_{i=1}^N \left[
+g(\mathbf{x}_i)f_m(\mathbf{x}_i) + \frac{1}{2} h(\mathbf{x}_i)f_m^2(\mathbf{x}_i)
+\right]  + \gamma T + \frac{1}{2} \lambda \sum \limits_{j=1}^T {w_j}^2$$</p>
+<p>To simplify this equation further, we can group the summations to be
+based on the points in the same leaf. Recall that we can define the
+$f_m$ as:</p>
+<p>$$f_m(\mathbf{x}) = \sum \limits_{j=1}^T w_j 1(\mathbf{x} \in R_j)$$</p>
+<p>Using that definition of $f_t$, we can simplify our objective:</p>
+<p>$$\begin{aligned}
+\mathcal{\tilde{L}}^{(m)}
+&#x26;= \sum \limits_{j=1}^T
+\left[
+\sum \limits_{\mathbf{x}_i \in R_j}
+g(\mathbf{x}_i)w_j + \frac{1}{2}\sum \limits_{\mathbf{x}_i \in R_j}  h(\mathbf{x}_i)w_j^2
+\right]  + \gamma T + \frac{1}{2} \lambda   \sum \limits_{j=1}^T  {w_j}^2 \\\
+&#x26;= \sum \limits_{j=1}^T
+\left[
+\sum \limits_{\mathbf{x}_i \in R_j}
+g(\mathbf{x}_i)w_j + \frac{1}{2}
+\left( \sum \limits_{\mathbf{x}_i \in R_j}   h(\mathbf{x}_i) + \lambda \right) w_j^2
+\right]  + \gamma T
+\end{aligned}$$</p>
+<p>We need to find $w_j$'s that need minimize this equation. Taking
+derivative with respect to $w_j$, we can find the optimum $w_j$:</p>
+<p>$$w_j^* = - \frac{
+\displaystyle{
+\sum \limits_{\mathbf{x}_i \in R_j}
+g(\mathbf{x}_i)
+}
+}{
+\displaystyle{
+\sum \limits_{\mathbf{x}_i \in R_j}   h(\mathbf{x}_i) + \lambda
+}
+} \tag{29}$$</p>
+<p>Using these $w_j$'s, we can find the optimum cost value:</p>
+<p>$$\mathcal{\tilde{L}}^{(m)^*}  = -\frac{1}{2} \sum \limits_{j=1}^T
+\frac{
+\displaystyle{
+\left(
+\sum \limits_{\mathbf{x}_i \in R_j}
+g(\mathbf{x}_i)
+\right)^2
+}
+}{
+\displaystyle{
+\sum \limits_{\mathbf{x}_i \in R_j}   h(\mathbf{x}_i) + \lambda
+}
+}  + \gamma T \tag{30}$$</p>
+<p>We can use this equation as a scoring function when deciding on split
+criteria. As discussed in Decision Trees chapter, when we looking for
+the best split across all feature space, we choose the feature and the
+split point that gives the most reduction in our impurity. Likewise,
+XGBoost chooses the split crtierion that results in most reduction in
+the cost (28).</p>
+<p>If a region $R$ is splitted into two regions $R_L$ and $R_R$, then the
+reduction in the cost after the split is given by:</p>
+<p>$$\mathcal{\tilde{L}}^{(m)^*} = \frac{1}{2} \left[
+\frac{
+(
+\sum \limits_{\mathbf{x}_i \in R_L}
+g(\mathbf{x}_i)
+)^2
+}{
+\sum \limits_{\mathbf{x}_i \in R_L}   h(\mathbf{x}_i) + \lambda
+} +
+\frac{
+(
+\sum \limits_{\mathbf{x}_i \in R_R}
+g(\mathbf{x}_i)
+)^2
+}{
+\sum \limits_{\mathbf{x}_i \in R_R}   h(\mathbf{x}_i) + \lambda
+} -
+\frac{
+(
+\sum \limits_{\mathbf{x}_i \in R}
+g(\mathbf{x}_i)
+)^2
+}{
+\sum \limits_{\mathbf{x}_i \in R}   h(\mathbf{x}_i) + \lambda
+}<br>
+\right] - \gamma \tag{31}$$</p>
+<h3 id="split-finding"><a href="#split-finding" aria-hidden="true"><span class="icon icon-link"></span></a>Split Finding</h3>
+<p>As we discussed in the previous chapter, split finding is arguably the
+most computationally expensive part of the Decision Tree algorithm. To
+find the best split for a specific node, we need to iterate over all
+features and sort their values, and search for the values that gives the
+best split according to some impurity measure like gini index, cross
+entropy or cost reduction like (31). This algorithm is called the Exact
+Greedy Algorithm. In settings where we have millions or billions of data
+points, this solution becomes infeasible.</p>
+<p>Instead, XGBoost proposes several algorithms for avoiding the
+disadvantages of Exact Greedy Algorithm for split finding.</p>
+<h3 id="approximate-algorithm"><a href="#approximate-algorithm" aria-hidden="true"><span class="icon icon-link"></span></a>Approximate Algorithm</h3>
+<p>Exact Greedy algorithm needs to enumerate over all values of a feature
+in one step and it needs to repeat that for all features. To avoid the
+computational cost of this process, XGBoost proposes an algorithm called
+Approximate Algorithm. What it does is, instead of looking at every
+value of a feature, it finds $l$ percentile of a feature, based on its
+values in the training set. Then, it iterates over these $l$ different
+percentiles to find the best possible split amongst these percentiles,
+instead of looking at $N_k  \approx N$ different values of a feature. As
+the Exact Greedy algorithm, Approximate Algorithm does this step for
+every features.</p>
+<h3 id="sparsity-aware-split-finding"><a href="#sparsity-aware-split-finding" aria-hidden="true"><span class="icon icon-link"></span></a>Sparsity-aware Split Finding</h3>
+<p>There can be a lot of sparse features in large data sets. This sparsity
+in the data slows down the split finding process. XGBoost proposes a
+Sparsity-aware Split Finding algorithm. It gives a default direction
+(left or right) to which a way the missing values in the feature to go
+while splitting the node. It finds the best direction from the data by
+looking at only the non-missing values and calculating the cost
+reduction in each direction.</p>
+<p>There are also low level optimizations XGBoost performs that speeds up
+the tree learning process. Its paper explains them in detail.</p>
+</div><div class="post__footer"><div class="post-tags"><a href="/blog/tag/Decision%20Tree/" class="post-tags__link"><span>#</span> Decision Tree
+  </a><a href="/blog/tag/Boosting/" class="post-tags__link"><span>#</span> Boosting
+  </a><a href="/blog/tag/Gradient%20Boosting/" class="post-tags__link"><span>#</span> Gradient Boosting
+  </a><a href="/blog/tag/Classification/" class="post-tags__link"><span>#</span> Classification
+  </a><a href="/blog/tag/Regression/" class="post-tags__link"><span>#</span> Regression
+  </a><a href="/blog/tag/XGBoost/" class="post-tags__link"><span>#</span> XGBoost
+  </a></div></div></div><div class="post-comments"></div><div class="author post-author"><img alt="Author image" src="data:image/svg+xml,%3csvg fill='none' viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3e%3cdefs%3e%3cfilter id='__svg-blur-42943d1c2cc6f573658ff02816b3b7e3'%3e%3cfeGaussianBlur in='SourceGraphic' stdDeviation='5'/%3e%3c/filter%3e%3c/defs%3e%3cimage x='0' y='0' filter='url(%23__svg-blur-42943d1c2cc6f573658ff02816b3b7e3)' width='300' height='300' xlink:href='data:image/jpeg%3bbase64%2c/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCABAAEADASIAAhEBAxEB/8QAGwAAAgIDAQAAAAAAAAAAAAAABAUGBwIDCAH/xAA0EAACAQIEBAUCBAYDAAAAAAABAgMEEQAFEiEGMUFhBxMiUXEUkTKBoeEIFSMkQrFTwfH/xAAYAQEBAQEBAAAAAAAAAAAAAAAEBQMCAf/EAB8RAAICAgMBAQEAAAAAAAAAAAECAAMRMQQSIUETUf/aAAwDAQACEQMRAD8ApvMrCtXzICqMdUd1vb4J2xrerEkYJKrY7kCxuf8AfLAOY1sokdKgySAXCknvvfuMLkqjGFUMeg98cKpxPSPYRVOKuoLObxhjsBzty2wF9PUVc4DjSOWnth/whQrUVVfV1EgjpqSMFieVyf8A3BUWaZTHWroa51XuV2x0%2bRqa1qDsxtwxwfJW0wgjmjhZt2YpqIHsL8sS9PBGvqKFqrL8wE04UssTrbX2uOuGnCObZfUUxqI4YxpNnZeQ%2be2LQ4V4y4dklWjTM4I6r/jLYlNdb33LBorWvIGZzPST1EKy0MyurAWIP%2bJ5G/2xhTGohDmmlqBIykM8RsdFrWPa18WR4uZXR0XGeYSUQTRUUi1iaeV2JDH77/fFcuxjpYvMY6rkgAj1fOKFTdhkSTyFwYq4vbL44xFTTwTyWV/MhDWb32IBGEEFLJU%2bVFDqedzYAnZVwxWqaoa9dK3oh8lWb1hVG4X49u%2bNseXzUiUs05jSmnl0XgkDuhtcAjuD%2beFhR6QIXOgTDqDIJ1KtKPMjWRhpV/RJZQQSOvM88a83jnmnWOnpIEQ7WXcj7DE4oIfNyJ7MwIaOWFtrqNNrW5e4I74U11VUoyxrHTqx5uL7D4/fB2J%2bxqoPQI38M24iyxc6/lWUZXXx0tIZJ46tnUsNOplXTsSBvvgvgOKgj4rnj4g4fat1kgeQCzRt2QG9vg/fEi8Ic%2byqg4ggomkklWoVopC0ZPmFvxatuo/TFu5aklFL9KlBDWxQACnnRljcx29OoEDe21wd7chgN7BWIEdUD091KU8XcuGUzZTWZbDmMEdXHJTvFWrsIxuAhYllN2Ox98Q3I8mqa3UyBH8pCzJqsbc/SLc%2buLk8Xsvmz/MaWHMJUhWki1CGE3EIfk7Obbkra9gotbvilcrzXMsnrGbLfLM0SFvPDCxUnZlPtYc8MoqborHUmX2hnIG5FKOiNe7K00EDxDQE1EA3J2JAsLnbb98B/VmmqPIEcQ9JVHJJs3K56XG4HtiY5DX0tNw/VQxCCOOWMySSMFaVH1elVJtuQCeoAtfniHTQLU5dPNHDLEqy3jY7g9Tdud7W7bd8MAO4Ykaj7gfMWpKmspJZXaB49MSu99LKbnbpe5wdmE8jVqPEislrsSbfkMRWnVxVUeYKCUkVkl6kNYgk/OxwbBnCKxhq1JANjba4wdxn2LpbHhk78KcweDjKCphgqi4YxuFZbMpHLtvjpzLK2aozeoimpmiiijRklLAh78%2bXK2Oa/DReH2qlmSeeOrB3/q6SB8dcWp4n8UHIfDUz5eZP76daQTA2dVKsWI72W354k3Avd1ErkqlAMqvxO4gbO%2bJc2EVTUiGaZlQKxCsielOXS1zbvhVw9R1VY8VPRSzFtmmaR9QstgNj0A6XwFlmY00rK8iNUAG7C9mH%2b7Y8zKZ4KgCFJFjB1A8j8W7YpoSMD%2bSHZgmQ%2bCu%2bniljaGJlc23vscC5jVs9e0m0ZYgkJsAByt%2b%2bMqhLz3H4TuMA1ILVFj1FsPYYEKPYQlfUUklozsGLWYXBv/1g/LGo81r4YaqZKHWwBkYXVcKwvnwAHaRdr4FKbdxscYWJnU3rfqZ0bwr4ZRZFm1LWZi8ddRuAY3Uek9/Y4kX8TK048MsuigaMSQ1ySiIHfQUZb2%2bSMc6ZVnuaw5YIaTMqqnSIgNGkpCn2Nv0x7mOd5rmFO0NfXyTx7XDG97ct%2buA18Kz9BYzZjrOYjJ1C4i2lrHiGqNirjcH2w9oc9Cyw/VxeZCGGsIxDEdj0xFm9PLpjOKS7KPcjDSo%2bwWcz/9k=' /%3e%3c/svg%3e" width="300" data-src="/blog/assets/static/author.5ee2e51.b6a6f2867ee6d9d79a7c676c3dcd0462.jpeg" data-srcset="/blog/assets/static/author.5ee2e51.b6a6f2867ee6d9d79a7c676c3dcd0462.jpeg 300w" data-sizes="(max-width: 300px) 100vw, 300px" class="author__image g-image g-image--lazy g-image--loading"><noscript><img src="/blog/assets/static/author.5ee2e51.b6a6f2867ee6d9d79a7c676c3dcd0462.jpeg" class="author__image g-image g-image--loaded" width="300" alt="Author image"></noscript><!----><p class="author__intro">
+		Mathematical Engineering and Computer Engineering student in Yildiz Technical University. I like reading and writing about Machine Learning.
+	</p><p class="author__links"><a href="//linkedin.com/in/tu%C4%9Frul-hasan-karabulut-b4942a147/" target="_blank">Linkedin</a><a href="//github.com/tugrulhkarabulut" target="_blank">GitHub</a></p></div></main><footer class="footer"><span class="footer__copyright">Copyright © 2020 Tuğrul Hasan Karabulut. </span></footer></div>
+  <script src="/blog/assets/js/app.ffa2eea8.js" defer></script><script src="/blog/assets/js/page--src--templates--post-vue.41fa0e29.js" defer></script>
+</body>
+
+</html>
