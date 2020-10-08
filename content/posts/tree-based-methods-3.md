@@ -28,7 +28,7 @@ Instead of looking at all possible functions, we usually narrow our
 function space down to a family of parameterized functions
 $F(\mathbf{x}; \mathbf{P})$ where $\mathbf{P}$ is a set of parameters that defines the model.
 
-Now, the problems reduces to finding the parameters, $P^*$, that
+Now, the problems reduces to finding the parameters, $\mathbf{P^*}$, that
 minimizes the expected loss.
 
 $$\begin{aligned}
@@ -42,7 +42,7 @@ $F^\* = F(\mathbf{x};\mathbf{P^*})$
 ### Numerical Optimization on Additive Models
 
 Now, we restrict our attention to additive models. We define our
-additive as following:
+additive model as following:
 
 $$
 F(\mathbf{x}; \{ \ \beta\_m, \mathbf{a}\_m \ \}\_{m=1}^M)
@@ -50,7 +50,7 @@ F(\mathbf{x}; \{ \ \beta\_m, \mathbf{a}\_m \ \}\_{m=1}^M)
 $$
 
 So, the $\mathbf{P}$ corresponds to the parameter set
-$\{ \ \beta\_m, \mathbf{a}\_m \ \}\_{m=1}^M$ and
+$\\{ \ \beta\_m, \mathbf{a}\_m \ \\}\_{m=1}^M$ and
 $h(\mathbf{x}; \mathbf{a})$ is a simple model obtained by a weak
 learner. We will be using small regression trees as our weak learners.
 In that case, the parameters, $\mathbf{a}\_m$, corresponds to split
@@ -64,7 +64,7 @@ minimum:
 
 $$x \gets x - \alpha * f^ \prime (x)$$
 
-where $\alpha$ is the learning data.
+where $\alpha$ is the learning rate.
 
 Or if we want to find the parameters of a function where it attains its
 minimum value, we make updates using a cost function
@@ -123,7 +123,7 @@ If you recall, this is the Forward Stagewise Additive Modelling
 technique that we talked about in the previous section.
 
 In the case where we have finite data, $g\_m$, the gradients are
-calculated for the training data instances $\{ \mathbf{x}\_i \}\_{i=1}^N$:
+calculated for the training data instances $\\{ \mathbf{x}\_i \\}\_{i=1}^N$:
 
 $$
 g\_m(\mathbf{x}\_i) = \left[
@@ -137,7 +137,7 @@ use the gradients directly, the model would not be well generalized.
 Therefore, we need our model to learn a mapping from training data
 points to gradients in order to generalize to unseen data. To do that,
 we use a parameterized function and that is the
-$h(\mathbf{x}; \mathbf{a})$, as we mentioned and learn its parameters,
+$h(\mathbf{x}; \mathbf{a})$, as we mentioned, and learn its parameters,
 $\mathbf{a}$, as given below:
 
 $$
@@ -147,10 +147,10 @@ $$
 
 So, we fit the negative gradients, $-g\_m$, to the parameterized model
 $h(\mathbf{x}; \mathbf{a})$ to learn a mapping from the obversations to
-its gradients. Negative gradients are also called \"pseudo-responses\",
+its gradients. Negative gradients are also called "pseudo-responses",
 in the sense that, we try to learn a mapping to them even though they
 are not the real response values. And they are also called
-\"pseudo-residuals\" as well.
+"pseudo-residuals" as well.
 
 Therefore, we have a general algorithm that we will work for any
 differentible loss function. At each stage of the algorithm we learn a
@@ -336,7 +336,7 @@ algorithm presented in Algorithm 5.
 
 ### Regularization
 
-Usually, we don't want our learning algorithm to \"overlearn\" our
+Usually, we don't want our learning algorithm to "overlearn" our
 training set. Instead, we want them to generalize and have high
 performance on unseen data as well as training data. If a learning
 algorithm performs almost perfect on training data but perform poorly on
@@ -373,7 +373,7 @@ the Gradient Boosting concept.
 XGBoost
 -------
 
-In recent years, several Gradient Boosting algorithms has been
+In recent years, several Gradient Boosting algorithms have been
 developed. With these algorithms, Gradient Boosting became much more
 scalable and computationally efficient. In Gradient Boosted Decision
 Trees, most computationally expensive part is the tree building process.
